@@ -1,1 +1,210 @@
-Enter file contents here
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Verifikasi Sertifikat</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f1e8;
+    margin: 0;
+    padding: 30px 15px;
+}
+
+.container {
+    max-width: 600px;
+    margin: auto;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #222;
+}
+
+.subtitle {
+    text-align: center;
+    color: #666;
+}
+
+input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 14px;
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #222;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.hasil {
+    margin-top: 25px;
+}
+
+.valid {
+    border: 2px solid #198754;
+    background: #eaf7ee;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.tidak-valid {
+    border: 2px solid #dc3545;
+    background: #fff0f0;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.data {
+    margin-top: 15px;
+    line-height: 1.7;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>VERIFIKASI SERTIFIKAT</h1>
+
+<p class="subtitle">
+Masukkan nomor sertifikat untuk memeriksa keabsahan data.
+</p>
+
+<input
+    type="text"
+    id="nomor"
+    placeholder="Contoh: FDR-MB-2026-0001"
+>
+
+<button onclick="cekSertifikat()">
+    VERIFIKASI SERTIFIKAT
+</button>
+
+<div id="hasil" class="hasil"></div>
+
+</div>
+
+<script>
+
+const dataSertifikat = {
+
+    "FDR-MB-2026-0001": {
+        nama: "Fitria Dwi Ramadani",
+        acara: "Webinar Online: Strategi dan Inovasi dalam Manajemen Bisnis di Era Digital",
+        tanggal: "25 September 2026",
+        penyelenggara: "Fitria Dwi Ramadani",
+        metode: "Zoom"
+    }
+
+};
+
+
+function cekSertifikat() {
+
+    const nomor = document
+        .getElementById("nomor")
+        .value
+        .trim()
+        .toUpperCase();
+
+    const hasil = document.getElementById("hasil");
+
+    const data = dataSertifikat[nomor];
+
+    if (data) {
+
+        hasil.innerHTML = `
+        <div class="valid">
+
+            <h2>✓ SERTIFIKAT VALID</h2>
+
+            <p>
+            Nomor sertifikat ditemukan dalam database verifikasi.
+            </p>
+
+            <div class="data">
+
+            <strong>Nomor Sertifikat:</strong><br>
+            ${nomor}<br><br>
+
+            <strong>Nama:</strong><br>
+            ${data.nama}<br><br>
+
+            <strong>Acara:</strong><br>
+            ${data.acara}<br><br>
+
+            <strong>Tanggal:</strong><br>
+            ${data.tanggal}<br><br>
+
+            <strong>Metode:</strong><br>
+            ${data.metode}<br><br>
+
+            <strong>Penyelenggara:</strong><br>
+            ${data.penyelenggara}
+
+            </div>
+
+        </div>
+        `;
+
+    } else {
+
+        hasil.innerHTML = `
+        <div class="tidak-valid">
+
+            <h2>✕ SERTIFIKAT TIDAK DITEMUKAN</h2>
+
+            <p>
+            Nomor sertifikat tersebut tidak ditemukan
+            dalam database verifikasi.
+            </p>
+
+        </div>
+        `;
+
+    }
+
+}
+
+
+// Membaca nomor sertifikat dari QR/link
+
+const parameter =
+    new URLSearchParams(window.location.search);
+
+const nomorDariQR =
+    parameter.get("nomor");
+
+if (nomorDariQR) {
+
+    document.getElementById("nomor").value =
+        nomorDariQR;
+
+    cekSertifikat();
+
+}
+
+</script>
+
+</body>
+</html>
